@@ -57,6 +57,9 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
+// Обслуговування статичних файлів React додатку
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 // API для категорій
 app.post('/api/categories', async (req, res) => {
     try {
@@ -112,6 +115,11 @@ app.get('/api/files/category/:categoryId', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// Обробка всіх інших запитів
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
 });
 
 app.listen(PORT, () => {
