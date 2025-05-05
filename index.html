@@ -170,9 +170,7 @@
             </div>
             <div class="flex-1 overflow-y-auto">
                 <div class="p-2">
-                    <button id="new-category-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded flex items-center justify-center mb-2">
-                        <i class="fas fa-plus mr-2"></i> <span data-i18n="new_category">Нова категорія</span>
-                    </button>
+                    <!-- Кнопка створення категорії видалена -->
                 </div>
                 <div id="category-list" class="p-2">
                     <!-- Categories will be added here -->
@@ -191,9 +189,7 @@
                     <h2 id="current-category" class="text-lg font-semibold" data-i18n="all_images">Всі зображення</h2>
                 </div>
                 <div>
-                    <button id="upload-btn" class="bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded">
-                        <i class="fas fa-upload mr-1"></i> <span data-i18n="upload">Завантажити</span>
-                    </button>
+                    <!-- Кнопка завантаження файлів видалена -->
                 </div>
             </div>
 
@@ -897,8 +893,117 @@
             }, 2000);
         }
 
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init);
+        // --- Галерея на основі skins.json ---
+        // Категорії = вкладені папки в skins/
+        // Зображення = PNG-файли у цих папках
+        // Потрібно згенерувати skins.json скриптом generate-skins-json.js
+
+        const CATEGORY_ROOT = 'skins';
+        let skinsTree = null;
+        let currentPath = [];
+
+        function fetchSkinsJson() {
+            return fetch('skins.json').then(r => r.json());
+        }
+
+        function buildCategoryTree(node, path = []) {
+            const ul = document.createElement('ul');
+            ul.className = path.length === 0 ? '' : 'ml-4';
+            const li = document.createElement('li');
+            li.className = 'sidebar-item flex items-center p-2 rounded cursor-pointer';
+            li.textContent = path.length === 0 ? 'Всі категорії' : node.name;
+            li.onclick = () => {
+                currentPath = [...path];
+                renderGallery();
+                highlightCategory();
+            };
+            li.id = 'cat-' + path.join('/');
+            ul.appendChild(li);
+            if (node.categories) {
+                node.categories.forEach(cat => {
+                    ul.appendChild(buildCategoryTree(cat, [...path, cat.name]));
+                });
+            }
+            return ul;
+        }
+
+        function getNodeByPath(node, path) {
+            if (path.length === 0) return node;
+            const [head, ...rest] = path;
+            const child = node.categories.find(c => c.name === head);
+            if (!child) return node;
+            return getNodeByPath(child, rest);
+        }
+
+        function collectFiles(node, basePath) {
+            let files = [];
+            if (node.files) {
+                files = files.concat(node.files.map(f => ({
+                    src: `${basePath}/${f}`,
+                    name: f
+                })));
+            }
+            if (node.categories) {
+                node.categories.forEach(cat => {
+                    files = files.concat(collectFiles(cat, `${basePath}/${cat.name}`));
+                });
+            }
+            return files;
+        }
+
+        function renderCategorySidebar() {
+            const sidebar = document.getElementById('category-list');
+            sidebar.innerHTML = '';
+            sidebar.appendChild(buildCategoryTree(skinsTree, []));
+            highlightCategory();
+        }
+
+        function highlightCategory() {
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            const id = 'cat-' + currentPath.join('/');
+            const el = document.getElementById(id);
+            if (el) el.classList.add('active');
+        }
+
+        function renderGallery() {
+            const browser = document.getElementById('file-browser');
+            browser.innerHTML = '';
+            const node = getNodeByPath(skinsTree, currentPath);
+            const basePath = CATEGORY_ROOT + (currentPath.length ? '/' + currentPath.join('/') : '');
+            const files = collectFiles(node, basePath);
+            if (files.length === 0) {
+                browser.innerHTML = `<div class='col-span-full text-center py-10 text-gray-400'><i class='fas fa-images text-4xl mb-2'></i><p>Немає зображень у цій категорії.</p></div>`;
+                return;
+            }
+            files.forEach(file => {
+                const div = document.createElement('div');
+                div.className = 'file-item bg-gray-800 rounded-lg p-3 hover:bg-gray-700 transition-colors fade-in';
+                div.innerHTML = `
+                    <div class="image-container rounded-lg overflow-hidden mb-2">
+                        <img src="${file.src}" alt="${file.name}" class="cursor-pointer view-image">
+                    </div>
+                    <div class="image-title text-center mb-2 cursor-pointer">${file.name}</div>
+                    <div class="file-actions flex justify-center">
+                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/${file.src}">
+                            <i class="fas fa-link text-sm"></i>
+                        </button>
+                    </div>
+                `;
+                // Копіювання URL
+                div.querySelector('.copy-btn').onclick = (e) => {
+                    navigator.clipboard.writeText(e.target.closest('button').getAttribute('data-url'));
+                };
+                browser.appendChild(div);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchSkinsJson().then(tree => {
+                skinsTree = { name: 'root', ...tree };
+                renderCategorySidebar();
+                renderGallery();
+            });
+        });
     </script>
 </body>
 </html>
