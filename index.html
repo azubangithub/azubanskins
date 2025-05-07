@@ -286,7 +286,7 @@
     <!-- Language Selection Modal -->
     <div id="language-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-gray-800 rounded-lg p-6 w-96">
-            <h3 class="text-xl font-bold mb-4 text-center">Виберіть мову / Choose language / Выберите язык</h3>
+            <h3 class="text-xl font-bold mb-4 text-center" data-i18n="select_language">Виберіть мову / Choose language / Выберите язык</h3>
             <div class="grid grid-cols-1 gap-3 mb-4">
                 <button class="language-option bg-gray-700 hover:bg-gray-600 rounded-lg p-3 text-center" data-lang="uk">
                     <span class="text-lg">Українська</span>
@@ -299,7 +299,7 @@
                 </button>
             </div>
             <div class="flex justify-end">
-                <button id="confirm-language" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">Підтвердити</button>
+                <button id="confirm-language" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700" data-i18n="confirm">Підтвердити</button>
             </div>
         </div>
     </div>
@@ -321,6 +321,7 @@
         // Translations
         const translations = {
             uk: {
+                select_language: "Виберіть мову",
                 new_category: "Нова категорія",
                 all_images: "Всі зображення",
                 upload: "Завантажити",
@@ -343,9 +344,14 @@
                 edit: "Редагувати",
                 view_image: "Переглянути",
                 no_name: "Без назви",
-                confirm: "Підтвердити"
+                confirm: "Підтвердити",
+                copy_link: "Копіювати посилання",
+                all_categories: "Всі категорії",
+                no_images_in_category: "Немає зображень у цій категорії",
+                confirm_action: "Підтвердіть дію"
             },
             en: {
+                select_language: "Select Language",
                 new_category: "New Category",
                 all_images: "All Images",
                 upload: "Upload",
@@ -368,9 +374,14 @@
                 edit: "Edit",
                 view_image: "View",
                 no_name: "No Name",
-                confirm: "Confirm"
+                confirm: "Confirm",
+                copy_link: "Copy Link",
+                all_categories: "All Categories",
+                no_images_in_category: "No images in this category",
+                confirm_action: "Confirm Action"
             },
             ru: {
+                select_language: "Выберите язык",
                 new_category: "Новая категория",
                 all_images: "Все изображения",
                 upload: "Загрузить",
@@ -393,7 +404,11 @@
                 edit: "Редактировать",
                 view_image: "Просмотреть",
                 no_name: "Без названия",
-                confirm: "Подтвердить"
+                confirm: "Подтвердить",
+                copy_link: "Копировать ссылку",
+                all_categories: "Все категории",
+                no_images_in_category: "Нет изображений в этой категории",
+                confirm_action: "Подтвердите действие"
             }
         };
 
@@ -610,19 +625,17 @@
         }
 
         // Language functions
-        function toggleLanguage() {
-            elements.languageModal.classList.remove('hidden');
-        }
-
         function applyLanguage() {
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                el.textContent = translate(key);
+                if (translations[state.language] && translations[state.language][key]) {
+                    el.textContent = translations[state.language][key];
+                }
             });
         }
 
         function translate(key) {
-            return translations[state.language][key] || key;
+            return translations[state.language]?.[key] || key;
         }
 
         function translateElement(element, key) {
