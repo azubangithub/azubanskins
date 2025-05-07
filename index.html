@@ -874,7 +874,14 @@
 
         // Encode URL properly
         function encodeURL(url) {
-            return url.split('/').map(part => encodeURIComponent(part)).join('/');
+            try {
+                const urlObj = new URL(url);
+                const pathParts = urlObj.pathname.split('/').filter(Boolean);
+                const encodedPath = pathParts.map(part => encodeURIComponent(part)).join('/');
+                return `${urlObj.origin}/${encodedPath}`;
+            } catch (e) {
+                return url;
+            }
         }
 
         // Show notification
