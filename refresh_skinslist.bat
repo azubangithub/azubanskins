@@ -1,0 +1,1 @@
+node generate-skins-json.js
