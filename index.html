@@ -877,7 +877,15 @@
             try {
                 const urlObj = new URL(url);
                 const pathParts = urlObj.pathname.split('/').filter(Boolean);
-                const encodedPath = pathParts.map(part => encodeURIComponent(part)).join('/');
+                const encodedPath = pathParts.map(part => {
+                    // Перевіряємо, чи частина вже закодована
+                    try {
+                        decodeURIComponent(part);
+                        return encodeURIComponent(part);
+                    } catch (e) {
+                        return part; // Якщо не вдається декодувати, значить вже закодовано
+                    }
+                }).join('/');
                 return `${urlObj.origin}/${encodedPath}`;
             } catch (e) {
                 return url;
