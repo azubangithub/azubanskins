@@ -762,15 +762,9 @@
                     <div class="image-title text-center mb-2 cursor-pointer view-image" data-index="${index}">
                         ${file.name || translate('no_name')}
                     </div>
-                    <div class="file-actions opacity-0 transition-opacity flex justify-center">
-                        <button class="edit-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="${translate('edit')}" data-id="${file.id}">
-                            <i class="fas fa-pencil-alt text-sm"></i>
-                        </button>
-                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="${translate('copy_link')}" data-url="${file.url}">
+                    <div class="file-actions flex justify-center">
+                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/azubanskins/${file.url}">
                             <i class="fas fa-link text-sm"></i>
-                        </button>
-                        <button class="delete-btn bg-gray-700 hover:bg-red-600 rounded-full w-8 h-8 flex items-center justify-center" title="${translate('delete_image')}" data-id="${file.id}">
-                            <i class="fas fa-trash text-sm"></i>
                         </button>
                     </div>
                 `;
@@ -799,8 +793,9 @@
                 // Copy button
                 const copyBtn = fileItem.querySelector('.copy-btn');
                 copyBtn.addEventListener('click', () => {
-                    copyToClipboard(copyBtn.getAttribute('data-url'));
-                    showNotification(translate('link_copied'));
+                    const url = copyBtn.getAttribute('data-url');
+                    copyToClipboard(encodeURL(url));
+                    showNotification('Посилання скопійовано!');
                 });
                 
                 // Delete button
@@ -875,6 +870,11 @@
             textarea.select();
             document.execCommand('copy');
             document.body.removeChild(textarea);
+        }
+
+        // Encode URL properly
+        function encodeURL(url) {
+            return url.split('/').map(part => encodeURIComponent(part)).join('/');
         }
 
         // Show notification
@@ -984,14 +984,16 @@
                     </div>
                     <div class="image-title text-center mb-2 cursor-pointer">${file.name}</div>
                     <div class="file-actions flex justify-center">
-                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/${file.src}">
+                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/azubanskins/${file.src}">
                             <i class="fas fa-link text-sm"></i>
                         </button>
                     </div>
                 `;
                 // Копіювання URL
                 div.querySelector('.copy-btn').onclick = (e) => {
-                    navigator.clipboard.writeText(e.target.closest('button').getAttribute('data-url'));
+                    const url = e.target.closest('button').getAttribute('data-url');
+                    copyToClipboard(encodeURL(url));
+                    showNotification('Посилання скопійовано!');
                 };
                 browser.appendChild(div);
             });
