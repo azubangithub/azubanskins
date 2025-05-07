@@ -283,6 +283,27 @@
         </div>
     </div>
 
+    <!-- Language Selection Modal -->
+    <div id="language-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-gray-800 rounded-lg p-6 w-96">
+            <h3 class="text-xl font-bold mb-4 text-center">Виберіть мову / Choose language / Выберите язык</h3>
+            <div class="grid grid-cols-1 gap-3 mb-4">
+                <button class="language-option bg-gray-700 hover:bg-gray-600 rounded-lg p-3 text-center" data-lang="uk">
+                    <span class="text-lg">Українська</span>
+                </button>
+                <button class="language-option bg-gray-700 hover:bg-gray-600 rounded-lg p-3 text-center" data-lang="en">
+                    <span class="text-lg">English</span>
+                </button>
+                <button class="language-option bg-gray-700 hover:bg-gray-600 rounded-lg p-3 text-center" data-lang="ru">
+                    <span class="text-lg">Русский</span>
+                </button>
+            </div>
+            <div class="flex justify-end">
+                <button id="confirm-language" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">Підтвердити</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // App state
         const state = {
@@ -293,7 +314,8 @@
             language: localStorage.getItem('language') || 'uk',
             contextMenuCategory: null,
             currentViewingIndex: -1,
-            editingFileId: null
+            editingFileId: null,
+            selectedLanguage: null
         };
 
         // Translations
@@ -320,7 +342,33 @@
                 edit_name: "Редагувати назву",
                 edit: "Редагувати",
                 view_image: "Переглянути",
-                no_name: "Без назви"
+                no_name: "Без назви",
+                confirm: "Підтвердити"
+            },
+            en: {
+                new_category: "New Category",
+                all_images: "All Images",
+                upload: "Upload",
+                no_images: "No images. Upload your PNG files.",
+                delete_category: "Delete Category",
+                cancel: "Cancel",
+                save: "Save",
+                upload_images: "Upload Images",
+                drag_files: "Drag files here or",
+                only_png: "(PNG files only)",
+                select_files: "Select Files",
+                completed: "completed",
+                start_upload: "Start Upload",
+                delete: "Delete",
+                confirm_delete_category: "Are you sure you want to delete this category? All images in it will also be deleted.",
+                link_copied: "Link copied!",
+                delete_image: "Delete Image",
+                confirm_delete_image: "Delete this image?",
+                edit_name: "Edit Name",
+                edit: "Edit",
+                view_image: "View",
+                no_name: "No Name",
+                confirm: "Confirm"
             },
             ru: {
                 new_category: "Новая категория",
@@ -344,7 +392,8 @@
                 edit_name: "Редактировать название",
                 edit: "Редактировать",
                 view_image: "Просмотреть",
-                no_name: "Без названия"
+                no_name: "Без названия",
+                confirm: "Подтвердить"
             }
         };
 
@@ -387,12 +436,23 @@
             editNameModal: document.getElementById('edit-name-modal'),
             editNameInput: document.getElementById('edit-name-input'),
             cancelEditName: document.getElementById('cancel-edit-name'),
-            saveEditName: document.getElementById('save-edit-name')
+            saveEditName: document.getElementById('save-edit-name'),
+            languageModal: document.getElementById('language-modal'),
+            languageOptions: document.querySelectorAll('.language-option'),
+            confirmLanguage: document.getElementById('confirm-language')
         };
 
         // Initialize the app
         function init() {
-            applyLanguage();
+            // Перевіряємо, чи є збережена мова
+            const savedLanguage = localStorage.getItem('language');
+            if (!savedLanguage) {
+                // Якщо немає збереженої мови, показуємо модальне вікно
+                elements.languageModal.classList.remove('hidden');
+            } else {
+                state.language = savedLanguage;
+                applyLanguage();
+            }
             renderCategories();
             renderFiles();
             setupEventListeners();
@@ -462,7 +522,9 @@
             });
 
             // Language switcher
-            elements.switchLanguage.addEventListener('click', toggleLanguage);
+            elements.switchLanguage.addEventListener('click', () => {
+                elements.languageModal.classList.remove('hidden');
+            });
 
             // Context menu
             document.addEventListener('click', () => {
@@ -522,16 +584,34 @@
                     }
                 }
             });
+
+            // Language selection
+            elements.languageOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Видаляємо активний клас з усіх опцій
+                    elements.languageOptions.forEach(opt => opt.classList.remove('bg-blue-600'));
+                    // Додаємо активний клас до вибраної опції
+                    option.classList.add('bg-blue-600');
+                    // Зберігаємо вибрану мову
+                    state.selectedLanguage = option.getAttribute('data-lang');
+                });
+            });
+
+            elements.confirmLanguage.addEventListener('click', () => {
+                if (state.selectedLanguage) {
+                    state.language = state.selectedLanguage;
+                    localStorage.setItem('language', state.language);
+                    applyLanguage();
+                    elements.languageModal.classList.add('hidden');
+                    // Оновлюємо текст на кнопці перемикання мови
+                    elements.switchLanguage.innerHTML = `<span class="text-sm">${state.language.toUpperCase()}</span>`;
+                }
+            });
         }
 
         // Language functions
         function toggleLanguage() {
-            state.language = state.language === 'uk' ? 'ru' : 'uk';
-            localStorage.setItem('language', state.language);
-            applyLanguage();
-            
-            // Update language switch button
-            elements.switchLanguage.innerHTML = state.language === 'uk' ? '<span class="text-sm">UA</span>' : '<span class="text-sm">RU</span>';
+            elements.languageModal.classList.remove('hidden');
         }
 
         function applyLanguage() {
