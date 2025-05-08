@@ -161,10 +161,10 @@
         <!-- Sidebar -->
         <div class="w-64 bg-gray-800 flex flex-col">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center">
-                <h1 class="text-xl font-bold">PNG Gallery</h1>
+                <h1 class="text-xl font-bold">Skin Gallery</h1>
                 <div class="language-switcher">
                     <button id="switch-language" class="bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center">
-                        <span class="text-sm">UA</span>
+                        <span class="text-sm">EN</span>
                     </button>
                 </div>
             </div>
@@ -186,7 +186,7 @@
                     <button id="back-btn" class="mr-2 text-gray-400 hover:text-white">
                         <i class="fas fa-arrow-left"></i>
                     </button>
-                    <h2 id="current-category" class="text-lg font-semibold" data-i18n="all_images">Всі зображення</h2>
+                    <h2 id="current-category" class="text-lg font-semibold" data-i18n="all_images">Всё изображения</h2>
                 </div>
                 <div>
                     <!-- Кнопка завантаження файлів видалена -->
@@ -198,7 +198,7 @@
                 <!-- Files will be displayed here -->
                 <div id="empty-state" class="col-span-full text-center py-10 text-gray-400">
                     <i class="fas fa-images text-4xl mb-2"></i>
-                    <p data-i18n="no_images">Немає зображень. Завантажте свої PNG файли.</p>
+                    <p data-i18n="no_images">Нету скинов</p>
                 </div>
             </div>
         </div>
@@ -279,27 +279,6 @@
             <div class="flex justify-end space-x-2">
                 <button id="cancel-edit-name" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700" data-i18n="cancel">Скасувати</button>
                 <button id="save-edit-name" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700" data-i18n="save">Зберегти</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Language Selection Modal -->
-    <div id="language-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-gray-800 rounded-lg p-6 w-96">
-            <h3 class="text-xl font-bold mb-4 text-center" data-i18n="select_language">Виберіть мову / Choose language / Выберите язык</h3>
-            <div class="grid grid-cols-1 gap-3 mb-4">
-                <button class="language-option bg-gray-700 hover:bg-gray-600 rounded-lg p-3 text-center" data-lang="uk">
-                    <span class="text-lg">Українська</span>
-                </button>
-                <button class="language-option bg-gray-700 hover:bg-gray-600 rounded-lg p-3 text-center" data-lang="en">
-                    <span class="text-lg">English</span>
-                </button>
-                <button class="language-option bg-gray-700 hover:bg-gray-600 rounded-lg p-3 text-center" data-lang="ru">
-                    <span class="text-lg">Русский</span>
-                </button>
-            </div>
-            <div class="flex justify-end">
-                <button id="confirm-language" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700" data-i18n="confirm">Підтвердити</button>
             </div>
         </div>
     </div>
