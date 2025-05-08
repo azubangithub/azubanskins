@@ -865,7 +865,7 @@
                 copyBtn.addEventListener('click', () => {
                     const url = copyBtn.getAttribute('data-url');
                     copyToClipboard(encodeURL(url));
-                    showNotification('Посилання скопійовано!');
+                    showNotification('Скопировано!');
                 });
                 
                 // Delete button
@@ -1068,18 +1068,20 @@
                         <img src="${file.src}" alt="${file.name}" class="cursor-pointer view-image">
                     </div>
                     <div class="image-title text-center mb-2 cursor-pointer">${file.name}</div>
-                    <div class="file-actions flex justify-center">
-                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/azubanskins/${file.src}">
-                            <i class="fas fa-link text-sm"></i>
-                        </button>
-                    </div>
+					<div class="file-actions flex justify-center">
+						<button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/azubanskins/${file.src}">
+							<i class="fas fa-link text-sm"></i>
+						</button>
+					</div>
                 `;
                 // Копіювання URL
-                div.querySelector('.copy-btn').onclick = (e) => {
-                    const url = e.target.closest('button').getAttribute('data-url');
-                    copyToClipboard(encodeURL(url));
-                    showNotification('Посилання скопійовано!');
-                };
+                div.querySelector('.copy-btn').onclick = () => {
+				const img = div.querySelector('img');
+					if (!img) return;
+					const url = location.origin + '/' + img.getAttribute('src');
+					copyToClipboard(url);
+					showNotification('Посилання скопійовано!');
+				};
                 browser.appendChild(div);
             });
         }
