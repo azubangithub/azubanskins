@@ -437,14 +437,7 @@
 
         // Initialize the app
         function init() {
-            // Перевіряємо, чи є збережена мова
-            const savedLanguage = localStorage.getItem('language');
-            if (!savedLanguage) {
-                // Якщо немає збереженої мови, показуємо модальне вікно
-                elements.languageModal.classList.remove('hidden');
-            } else {
-                state.language = 'en';
-                applyLanguage();
+            applyLanguage();
             }
             renderCategories();
             renderFiles();
