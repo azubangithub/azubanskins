@@ -835,10 +835,7 @@
                         ${file.name || translate('no_name')}
                     </div>
                     <div class="file-actions flex justify-center">
-                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/azubanskins/${file.url}">
-                            <i class="fas fa-link text-sm"></i>
-                        </button>
-                    </div>
+                        </div>
                 `;
                 
                 // Add click event for viewing image
@@ -1071,10 +1068,7 @@
                     </div>
                     <div class="image-title text-center mb-2 cursor-pointer">${file.name}</div>
                     <div class="file-actions flex justify-center">
-                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/azubanskins/${file.src}">
-                            <i class="fas fa-link text-sm"></i>
-                        </button>
-                    </div>
+                        </div>
                 `;
                 // Копіювання URL
                 div.querySelector('.copy-btn').onclick = (e) => {
