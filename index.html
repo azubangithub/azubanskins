@@ -1075,10 +1075,15 @@
 					</div>
                 `;
                 // Копіювання URL
-                div.querySelector('.copy-btn').onclick = () => {
-				const img = div.querySelector('img');
+				div.querySelector('.copy-btn').onclick = () => {
+					const img = div.querySelector('img');
 					if (!img) return;
-					const url = location.origin + '/' + img.getAttribute('src');
+					const rawPath = img.getAttribute('src');
+					const encoded = rawPath
+						.split('/')
+						.map(encodeURIComponent)
+						.join('/');
+					const url = location.origin + '/' + encoded;
 					copyToClipboard(url);
 					showNotification('Посилання скопійовано!');
 				};
