@@ -163,10 +163,7 @@
             <div class="p-4 border-b border-gray-700 flex justify-between items-center">
                 <h1 class="text-xl font-bold">PNG Gallery</h1>
                 <div class="language-switcher">
-                    <button id="switch-language" class="bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center">
-                        <span class="text-sm">UA</span>
-                    </button>
-                </div>
+                    </div>
             </div>
             <div class="flex-1 overflow-y-auto">
                 <div class="p-2">
@@ -837,10 +834,7 @@
                         ${file.name || translate('no_name')}
                     </div>
                     <div class="file-actions flex justify-center">
-                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/azubanskins/${file.url}">
-                            <i class="fas fa-link text-sm"></i>
-                        </button>
-                    </div>
+                        </div>
                 `;
                 
                 // Add click event for viewing image
@@ -866,11 +860,10 @@
                 
                 // Copy button
                 const copyBtn = fileItem.querySelector('.copy-btn');
-                copyBtn.addEventListener('click', (e) => {
-                    const img = e.target.closest('.file-item').querySelector('img');
-                    if (img) {
-                        window.open(img.src, '_blank');
-                    }
+                copyBtn.addEventListener('click', () => {
+                    const url = copyBtn.getAttribute('data-url');
+                    copyToClipboard(encodeURL(url));
+                    showNotification('Link copied!');
                 });
                 
                 // Delete button
@@ -1074,10 +1067,7 @@
                     </div>
                     <div class="image-title text-center mb-2 cursor-pointer">${file.name}</div>
                     <div class="file-actions flex justify-center">
-                        <button class="copy-btn bg-gray-700 hover:bg-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-1" title="Копіювати URL" data-url="${window.location.origin}/azubanskins/${file.src}">
-                            <i class="fas fa-link text-sm"></i>
-                        </button>
-                    </div>
+                        </div>
                 `;
                 // Копіювання URL
                 div.querySelector('.copy-btn').onclick = (e) => {
