@@ -282,6 +282,18 @@
       ]
     },
     {
+      "name": "NumberGarages",
+      "categories": [],
+      "files": [
+        "1.png",
+        "2.png",
+        "3.png",
+        "4.png",
+        "5.png",
+        "6.png"
+      ]
+    },
+    {
       "name": "Stepaa_priss - Степан",
       "categories": [],
       "files": [
@@ -333,18 +345,6 @@
         "skin.png",
         "skin4.png",
         "skin_smoking1.png"
-      ]
-    },
-    {
-      "name": "гаражи номера",
-      "categories": [],
-      "files": [
-        "1.png",
-        "2.png",
-        "3.png",
-        "4.png",
-        "5.png",
-        "6.png"
       ]
     },
     {
