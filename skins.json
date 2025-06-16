@@ -294,6 +294,14 @@
       ]
     },
     {
+      "name": "PNGS",
+      "categories": [],
+      "files": [
+        "LicensePng.png",
+        "PiratePng.png"
+      ]
+    },
+    {
       "name": "Stepaa_priss - Степан",
       "categories": [],
       "files": [
@@ -304,6 +312,64 @@
         "b142115df5d6ba8c.png",
         "b52793d1e2d27a3d.png",
         "Stepa_pristok_1.png"
+      ]
+    },
+    {
+      "name": "TheKriz's",
+      "categories": [],
+      "files": [
+        "0.png",
+        "1.png",
+        "10.png",
+        "11.png",
+        "12.png",
+        "13.png",
+        "14.png",
+        "15.png",
+        "16.png",
+        "17.png",
+        "18.png",
+        "19.png",
+        "2 - Копировать.png",
+        "2.gray.png",
+        "2.png",
+        "20.png",
+        "21.png",
+        "22.png",
+        "23.png",
+        "24.png",
+        "25.png",
+        "26.png",
+        "27.png",
+        "3.png",
+        "39.png",
+        "4.png",
+        "40.png",
+        "41.png",
+        "42(NoHair).png",
+        "42.png",
+        "5.png",
+        "6.png",
+        "7.png",
+        "8.png",
+        "9.png"
+      ]
+    },
+    {
+      "name": "TheKriz's 2.0",
+      "categories": [],
+      "files": [
+        "TheKriz#1.png",
+        "TheKriz#2.png",
+        "TheKrizBleach.png",
+        "TheKrizOrigin.png",
+        "TheKrizOriginGray.png",
+        "TheKrizOrigin_NoEye.png",
+        "TheKrizSteve.png",
+        "TheKrizVenom.png",
+        "TheKrizWarped.png",
+        "TheKryzMask.png",
+        "TheKryzTV.png"
       ]
     },
     {
