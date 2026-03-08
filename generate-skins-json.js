@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SKINS_DIR = path.join(__dirname, 'skins');
-const OUTPUT_FILE = path.join(__dirname, 'skins.json');
+const OUTPUT_FILE = path.join(__dirname, 'skins.js');
 
 function scanDir(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -16,13 +16,24 @@ function scanDir(dir) {
         ...scanDir(path.join(dir, entry.name))
       });
     } else if (entry.isFile() && entry.name.toLowerCase().endsWith('.png')) {
-      files.push(entry.name);
+      const filePath = path.join(dir, entry.name);
+      try {
+        const base64Data = fs.readFileSync(filePath, 'base64');
+        files.push({
+          name: entry.name,
+          data: `data:image/png;base64,${base64Data}`
+        });
+      } catch (err) {
+        console.error('Error reading file:', filePath);
+      }
     }
   }
 
   return { categories, files };
 }
 
+console.log('Scanning directories and encoding images...');
 const tree = scanDir(SKINS_DIR);
-fs.writeFileSync(OUTPUT_FILE, JSON.stringify(tree, null, 2), 'utf-8');
-console.log('skins.json згенеровано!'); 
+const jsContent = `window.skinsData = ${JSON.stringify(tree, null, 2)};`;
+fs.writeFileSync(OUTPUT_FILE, jsContent, 'utf-8');
+console.log('skins.js згенеровано!'); 
