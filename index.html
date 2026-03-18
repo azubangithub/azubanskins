@@ -95,6 +95,7 @@
         .image-title {
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -702,9 +703,12 @@
             els.img2d.src = file.src;
 
             // Setup copy and download actions
-            const encodeUrl = encodeURL(`${window.location.origin}/azubanskins/${file.rawPath}`);
+            const baseUrl = window.location.href.split(/[?#]/)[0].split('/').slice(0, -1).join('/');
+            const rawUrl = `${baseUrl}/${file.rawPath}`;
+            const finalUrl = encodeURI(rawUrl);
+            
             els.viewerCopyUrl.onclick = () => {
-                copyToClipboard(encodeUrl);
+                copyToClipboard(finalUrl);
                 showNotification(translate('link_copied'));
             };
 
@@ -820,22 +824,6 @@
             textarea.select();
             document.execCommand('copy');
             document.body.removeChild(textarea);
-        }
-
-        function encodeURL(url) {
-            try {
-                const urlObj = new URL(url);
-                const pathParts = urlObj.pathname.split('/').filter(Boolean);
-                const encodedPath = pathParts.map(part => {
-                    try {
-                        decodeURIComponent(part);
-                        return encodeURIComponent(part);
-                    } catch (e) { return part; }
-                }).join('/');
-                return `${urlObj.origin}/${encodedPath}`;
-            } catch (e) {
-                return url;
-            }
         }
 
         function showNotification(message, type = "success") {
